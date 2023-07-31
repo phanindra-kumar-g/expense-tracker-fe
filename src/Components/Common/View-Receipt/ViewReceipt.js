@@ -7,7 +7,7 @@ const ViewReceipt = (props) => {
   return (
     <Modal onOverLayClick={closeReceipt}>
       <div className="view-receipt-wrapper">
-        <img src={fileBase64} width="100%" ></img>
+        <img src={fileBase64} width="100%" alt="Receipt"></img>
       </div>
     </Modal>
   );

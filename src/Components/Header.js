@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 const Header = (args) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggle = () => setIsOpen(!isOpen);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light app-header">

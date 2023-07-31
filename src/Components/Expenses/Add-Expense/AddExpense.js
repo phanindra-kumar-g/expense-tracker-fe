@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import "./AddExpense.scss";
-import { convertFileToBase64 } from "../../Common/Common";
 import Modal from "../../Common/Modal/Modal";
 
 const AddExpense = (props) => {

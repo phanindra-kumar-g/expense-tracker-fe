@@ -3,9 +3,6 @@ import "./Header.scss";
 import { Link } from 'react-router-dom';
 
 const Header = (args) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light app-header">
             <Link className="navbar-brand" to="/expenses">Tracker</Link>

@@ -1,0 +1,11 @@
+.view-receipt-wrapper {
+  border: 1px solid lightgray;
+  border-radius: 12px;
+  height: 70vh;
+  width: 60vw;
+  overflow: auto;
+
+  iframe {
+    width: 100%;
+  }
+}

@@ -1,0 +1,21 @@
+nav.navbar.app-header {
+
+    .navbar-brand {
+        color: #ff3a3ad4;
+        margin: 0 0 0 20px;
+        text-transform: uppercase;
+    }
+
+    .navbar-collapse {
+        justify-content: flex-end;
+
+        .navbar-nav {
+            .nav-item {
+                .nav-link.active {
+                    font-weight: 600;
+                    color: red;
+                }
+            }
+        }
+    }
+}

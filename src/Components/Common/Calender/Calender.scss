@@ -1,0 +1,20 @@
+.calender {
+    border: 1px solid #f1f1f1;
+    border-radius: 4px;
+    padding: 4px;
+    min-width: 60px;
+    background-color: #f1f1f1;
+    text-align: center;
+
+    .date {
+        font-size: 14px;
+    }
+
+    .month {
+        font-size: 14px;
+    }
+
+    .year {
+        font-size: 14px;
+    }
+}

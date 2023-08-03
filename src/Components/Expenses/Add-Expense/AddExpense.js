@@ -73,16 +73,26 @@ const AddExpense = (props) => {
         }
       ];
       closeForm(newExpenses);
+      resetForm();
     } catch (err) {
       console.error("AddExpense:addNewExpense-- Error occured: ", err);
       alert("Unable to save expense, please try again later!");
     }
   };
 
+  const resetForm = () => {
+    title.current.value = "";
+    description.current.value = "";
+    amount.current.value = "";
+    date.current.value = "";
+    expenseType.current.value = "";
+    setFile("");
+  }
+
   return (
     showForm && (
       <Modal onOverLayClick={closeFormHandler}>
-        <div className="add-expense-wrapper">
+        <div className="add-expense-wrapper" onClick={event => event.stopPropagation()}>
           <div className="add-expense-title">Add New Expense</div>
           <div className="form-field">
             <div className="label">Title</div>

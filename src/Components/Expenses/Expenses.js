@@ -15,7 +15,7 @@ const Expenses = (props) => {
     try {
       const response = await fetchExpenses();
       const range = response.result;
-      if (!range || !range.values || range.values.length == 0) {
+      if (!range || !range.values || range.values.length === 0) {
         alert("No values found.");
         return;
       }

@@ -9,12 +9,7 @@ const Modal = (props) => {
   };
 
   return (
-    <div className="modal-wrapper">
-      <div
-        className="modal-overlay"
-        tabIndex="0"
-        onClick={overLayClickHandler}
-      ></div>
+    <div className="modal-wrapper" tabIndex="0" onClick={overLayClickHandler}>
       <div className="modal-body">{props.children}</div>
     </div>
   );

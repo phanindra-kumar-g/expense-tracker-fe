@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import "./AddExpense.scss";
 import Modal from "../../Common/Modal/Modal";
+import { updateRecords } from "../../Sheets";
+import { convertFileToBase64 } from "../../Common/Common";
 
 const AddExpense = (props) => {
-  const { showForm, closeForm } = props;
+  const { showForm, closeForm, allExpenses } = props;
   const title = useRef();
   const description = useRef();
   const amount = useRef();
@@ -17,18 +19,8 @@ const AddExpense = (props) => {
 
   const onFileChange = async (event) => {
     try {
-      const payload = new FormData();
-      payload.append("file", event.target.files[0]);
-      const res = await fetch("http://localhost:3500/file/upload", {
-        method: "post",
-        body: payload,
-      });
-      const resData = await res.json();
-      if (resData.status && resData.code === 200) {
-        setFile(resData.data);
-      } else {
-        alert(resData.message);
-      }
+      const base64 = await convertFileToBase64(event.target.files[0]);
+      setFile(base64);      
     } catch (err) {
       console.log("AddExpense:addNewExpense-- Error occured: ", err);
       alert("Failed to upload file");
@@ -47,36 +39,40 @@ const AddExpense = (props) => {
         descriptionVal !== "" &&
         amountVal !== "" &&
         dateVal !== "" &&
-        file !== "" &&
+        (file !== "" || file === "") &&
         typeVal !== "";
       if (!isValidFormData) {
         alert("Form is invalid, missing fields!");
         return;
       }
-      const payload = {
-        title: title.current.value,
-        description: description.current.value,
-        amount: Number(amount.current.value).toFixed(2),
-        date: date.current.value,
-        file: file,
-        type: typeVal
-      };
+      let fileArray = file !== "" ? file.match(/.{1,50000}/g) : "";
+      const dateArray = dateVal.split("-");
+      const formatttedDate = dateArray[1] + "-" + dateArray[2] + "-" + dateArray[0];
+      const payload = [
+        `expense${allExpenses.length + 1}`,
+        title.current.value,
+        description.current.value,
+        Number(amount.current.value).toFixed(2),
+        formatttedDate,
+        typeVal,
+        ...fileArray,
+      ];
 
-      const res = await fetch("http://localhost:3500/expenses/update", {
-        method: "post",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const resData = await res.json();
-      if (resData.status && resData.code === 200) {
-        alert("Saved Successfully!");
-        closeForm(resData.expenses);
-      } else {
-        console.error("AddExpense:addNewExpense-- ", resData.message);
-        alert(resData.message);
-      }
+      const res = await updateRecords(payload);
+      console.log("Response: ", res);
+      const newExpenses = [
+        ...allExpenses,
+        {
+          id: payload[0],
+          title: payload[1],
+          description: payload[2],
+          amount: payload[3],
+          date: payload[4],
+          type: payload[5],
+          file: file
+        }
+      ];
+      closeForm(newExpenses);
     } catch (err) {
       console.error("AddExpense:addNewExpense-- Error occured: ", err);
       alert("Unable to save expense, please try again later!");
@@ -107,7 +103,7 @@ const AddExpense = (props) => {
           <div className="form-field">
             <div className="label">Type</div>
             <select ref={expenseType}>
-              <option selected default hidden value="">Select</option>
+              <option selected defaultValue hidden>Select</option>
               <option value="debit">Debit</option>
               <option value="credit">Credit</option>
             </select>

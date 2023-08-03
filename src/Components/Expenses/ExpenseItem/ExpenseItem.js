@@ -5,30 +5,11 @@ import "./ExpenseItem.scss";
 
 const ExpenseItem = (props) => {
   const { expense } = props;
-  const [receiptData, setReceiptData] = useState("");
+  const [receiptData, setReceiptData] = useState(false);
 
   const onSelectExpense = async () => {
     try {
-      const payload = {
-        fileName: expense.file.path
-      }
-      const res = await fetch("http://localhost:3500/file/get", {
-        method: 'post',
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        }
-      });
-
-      const resData = await res.json();
-
-      if(resData.code === 200 && resData.status) {
-        const base64 = `data:${expense.file.mimetype};base64, ${resData.data}`;
-        console.log("Base 64: ", base64);
-        setReceiptData(base64);
-      } else {
-        alert(resData.message);
-      }
+      setReceiptData(true);
     } catch(err) {
       alert("Error while retriving the attachment.");
     }
@@ -54,9 +35,9 @@ const ExpenseItem = (props) => {
           <i className="fa fa-file-pdf-o file-preview" aria-hidden="true"></i>
         </div>
       </div>
-      {receiptData && (
-        <ViewReceipt
-          fileBase64={receiptData}
+      {receiptData && expense.file && (
+        <ViewReceipt 
+          fileBase64={expense.file}
           closeReceipt={closeReceiptModal}
         />
       )}
